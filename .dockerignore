@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+.editorconfig
+.env
+vendor
+node_modules
+storage
+bootstrap/cache
+*.log
+*.md
+phpunit.xml
+public/storage
