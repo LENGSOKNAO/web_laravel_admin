@@ -28,7 +28,7 @@
   
                   <div class="form-group">
                       <label for="banner_image">Banner Image:</label>
-                      <input type="file" name="banner_image" id="banner_image" class="form-control" accept="image/*" required>
+                      <input type="file" name="banner_image" id="banner_image" class="form-control" accept="image/*,video/*" required>
                       <div class="image-preview" id="bannerImagePreview">
                           <!-- Image preview will be inserted here -->
                       </div>
@@ -36,22 +36,32 @@
   
                   <div class="form-group">
                       <label for="banner_small_image">Small Image:</label>
-                      <input type="file" name="banner_small_image" id="banner_small_image" class="form-control" accept="image/*" required>
+                      <input type="file" name="banner_small_image" id="banner_small_image" class="form-control" accept="image/*"  >
                       <div class="image-preview" id="bannerSmallImagePreview">
                           <!-- Image preview will be inserted here -->
                       </div>
-                  </div>
+                  </div>  
   
                   <div class="form-group">
-                      <label for="banner_is_enable">Enable Banner:</label>
-                      <input type="checkbox" name="banner_is_enable" id="banner_is_enable" value="1" class="form-checkbox">
+                      <label for="banner_brand">Banner Brand:</label>
+                      <input type="text" name="banner_brand" id="banner_brand" value="{{ old('banner_brand') }}" class="form-control">
                   </div>
-  
+
+                  <div class="form-group">
+                      <label for="banner_category">Banner Category:</label>
+                      <input type="text" name="banner_category" id="banner_category" value="{{ old('banner_category') }}" class="form-control">
+                  </div>
+
                   <div class="form-group">
                       <label for="banner_link">Banner Link:</label>
                       <input type="text" name="banner_link" id="banner_link" value="{{ old('banner_link') }}" class="form-control">
                   </div>
   
+                  <div class="form-group" style="display: flex" >
+                    <label for="banner_is_enable">Enable Banner:</label>
+                    <input type="checkbox" name="banner_is_enable" id="banner_is_enable" value="1" class="form-checkbox">
+                </div>
+
                   <button type="submit" class="btn-primary">Create Banner</button>
               </form>
           </div>

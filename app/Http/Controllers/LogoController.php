@@ -7,6 +7,11 @@ use App\Models\Logo;
 
 class LogoController extends Controller
 {
+    public function logo()
+    {
+        $logo = Logo::all();
+        return response()->json($logo);
+    }
     //  show data
     public function index (){
         $logos = Logo::all();

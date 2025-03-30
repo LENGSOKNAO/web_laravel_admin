@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('banner_image');
             $table->string('banner_small_image')->nullable();
             $table->boolean('banner_is_enable')->default(true);
+            $table->string('banner_brand')->nullable();
+            $table->string('banner_category')->nullable();
             $table->string('banner_link')->nullable();
             $table->timestamps();
         });

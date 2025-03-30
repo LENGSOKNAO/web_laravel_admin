@@ -7,6 +7,17 @@ use App\Models\Slider;
 
 class SilderController extends Controller
 {
+    public function slider(){
+        $slider = Slider::all();
+        return response()->json($slider);
+    }
+    
+    public function men()
+    {
+        $slider = Slider::where('slide_category', 'like', '%men%')->paginate(10);
+    
+        return view('slider.index', compact('slider'));
+    }
     public function index (){
         $slider = Slider::all();
         return view('slider.index', compact('slider'));
@@ -14,34 +25,38 @@ class SilderController extends Controller
     public function create(){
         return view('slider.create');
     }
-    public function store(Request $request){
-
+    public function store(Request $request) {
         $slider = $request->validate([
-        'slide_name' => 'required|string|max:266',
-        'slide_brand' => 'nullable|string|max:100',
-        'slide_image' => 'required|image',
-        'slide_small_image' => 'nullable|image',
-        'slide_description' => 'nullable|string',
-        'slide_is_enable' => 'boolean'
+            'slide_name' => 'required|string|max:266',
+            'slide_brand' => 'nullable|string|max:100',
+            'slide_category' => 'nullable|string|max:100',
+            'slide_image' => 'required|image',
+            'slide_small_image' => 'nullable|image',
+            'slide_description' => 'nullable|string',
+            'slide_is_enable' => 'boolean'
         ]);
-
+    
+        
         $image = $request->file('slide_image')->store('sliders', 'public');
-
+    
+        
         $image_small = null;
-        if($request->hasFile('slider_small_image')){
-            $image_small = $request->hasFile('slide_small_image')->store('sliders', 'public');
+        if ($request->hasFile('slide_small_image')) {
+            $image_small = $request->file('slide_small_image')->store('sliders', 'public');
         }
-
+    
+       
         Slider::create([
-            'slide_name' =>  $request->slide_name,
+            'slide_name' => $request->slide_name,
             'slide_brand' => $request->slide_brand,
+            'slide_category' => $request->slide_category,
             'slide_image' => $image,
-            'slide_small_image' =>  $image_small,
-            'slide_description' =>  $request->slide_description,
+            'slide_small_image' => $image_small,
+            'slide_description' => $request->slide_description,
             'slide_is_enable' => $request->slide_is_enable
         ]);
-
-        return redirect()->route('slider.index')->with('Created !!!!');
+    
+        return redirect()->route('slider.index')->with('success', 'Slider created successfully!');
     }
     public function edit($id)
     {
@@ -55,8 +70,9 @@ class SilderController extends Controller
         $request->validate([
             'slide_name' => 'required|string|max:266',
             'slide_brand' => 'nullable|string|max:100',
-            'slide_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'slide_small_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'slide_category' => 'nullable|string|max:100',
+            'slide_image' => 'nullable|image',
+            'slide_small_image' => 'nullable|image ',
             'slide_description' => 'nullable|string',
             'slide_is_enable' => 'required|boolean'
         ]);
@@ -76,6 +92,7 @@ class SilderController extends Controller
         $slider->update([
             'slide_name' => $request->slide_name,
             'slide_brand' => $request->slide_brand,
+            'slide_category' => $request->slide_category,
             'slide_description' => $request->slide_description,
             'slide_is_enable' => $request->slide_is_enable,
         ]);

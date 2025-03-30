@@ -14,6 +14,8 @@ class Banner extends Model
         'banner_image',
         'banner_small_image',
         'banner_is_enable',
-        'banner_link'
+        'banner_link',
+        'banner_brand',
+        'banner_category'
     ];
 }

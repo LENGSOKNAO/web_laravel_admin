@@ -150,6 +150,9 @@
                 
                     <label>Slide Brand:</label>
                     <input type="text" name="slide_brand">
+
+                    <label>Slide Category:</label>
+                    <input type="text" name="slide_category">
                 
                     <label>Slide Image:</label>
                     <input type="file" name="slide_image" id="slideImageInput" accept="image/*" required>

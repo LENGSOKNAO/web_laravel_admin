@@ -30,6 +30,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="slide_category">Slide Category:</label>
+                    <input type="text" id="slide_category" name="slide_category" value="{{ old('slide_category', $slider->slide_category) }}">
+                    @error('slide_category')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
                     <label for="slide_image">Slide Image:</label>
                     <input type="file" id="slide_image" name="slide_image" accept="image/*">
                     <div class="image-preview-container">

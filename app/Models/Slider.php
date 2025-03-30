@@ -12,6 +12,7 @@ class Slider extends Model
         'slide_name',
         'slide_brand',
         'slide_image',
+        'slide_category',
         'slide_small_image',
         'slide_description',
         'slide_is_enable',

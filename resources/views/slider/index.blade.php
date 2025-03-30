@@ -1,198 +1,417 @@
-<style>
-    /* Container Styles */
-    .container {
-        width: 100%;  
-        padding: 15px;
-        background: rgb(15,17,26);
-        min-height: 100vh;
-    }
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Slider Management</title>
+        <style>
+            .blue-text {
+                color: rgb(29, 30, 31);
+            }
+            .products {
+                font-size: 12px;
+                font-weight: 500;
+                color: rgb(58, 59, 61);
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            select:not(:last-child) {
+                padding: 6.5px 0;
+                border-right: 1px solid #ccc;
+            }
+            select:focus {
+                outline: none;
+            }
+            option:checked {
+                color: rgb(29, 30, 31);
+            }
+            li {
+                list-style: none;
+            }
+            .add-btn {
+                display: inline-block;
+                padding: 8px 16px;
+                background-color: rgb(56, 116, 255);
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 500;
+                transition: background-color 0.3s ease;
+            }
+            .add-btn:hover {
+                background-color: rgb(45, 93, 204);
+            }
+            .add-btn:active {
+                background-color: rgb(34, 70, 153);
+            }
+            tr th {
+                padding: 10px;
+                border-bottom: 1px solid rgb(203, 208, 221);
+            }
+            tr td {
+                padding: 10px;
+                text-align: center;
+                border-bottom: 1px solid rgb(203, 208, 221);
+            }
+            .hidden {
+                display: none;
+            }
+            .dropdown-menu {
+                z-index: 1000;
+            }
+            .pagination {
+                display: flex;
+                justify-content: center;
+            }
+            .pagination .page-link {
+                background: linear-gradient(to right, #4f46e5, #9333ea);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                padding: 0.75rem 1.25rem;
+                margin: 0 0.5rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+            }
+            .pagination .page-item.active .page-link {
+                background: linear-gradient(to right, #4338ca, #7e22ce);
+            }
+            .pagination .page-link:hover {
+                background: linear-gradient(to right, #3b82f6, #a855f7);
+            }
+            .pagination .disabled .page-link {
+                background: #e5e7eb;
+                color: #6b7280;
+                box-shadow: none;
+            }
+            .custom-pagination {
+                display: flex;
+                justify-content: center;
+                margin-top: 2rem;
+            }
+            .custom-pagination a,
+            .custom-pagination span {
+                padding: 0.75rem 1.25rem;
+                margin: 0 0.5rem;
+                border-radius: 50%;
+                text-decoration: none;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .custom-pagination a {
+                background: linear-gradient(to right, #4f46e5, #9333ea);
+                color: white;
+            }
+            .custom-pagination a:hover {
+                background: linear-gradient(to right, #3b82f6, #a855f7);
+                box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+            }
+            .custom-pagination span {
+                background: #e5e7eb;
+                color: #6b7280;
+            }
+            .custom-pagination .current {
+                background: linear-gradient(to right, #4338ca, #7e22ce);
+                color: white;
+                font-weight: bold;
+            }
+            .btn-create {
+                background-color: transparent;
+                padding: 6px 14px;
+                text-decoration: none;
+                font-size: 13px;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                border-bottom: 2px solid transparent;
+                transition: all 0.2s ease-in-out;
+            }
+            .btn-create i {
+                font-size: 12px;
+            }
+            .btn-create:hover {
+                border-color: #1e7e34;
+            }
+            .h {
+                background: rgb(255, 255, 255);
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                border-top: rgb(143, 146, 135) 1px solid;
+            }
+            .badge {
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 0.8rem;
+                color: white;
+            }
+            .bg-success { 
+                background: #28a745; 
+            }
+            .bg-danger { 
+                background: #ff6b6b; 
+            }
+            .btn-primary {
+                padding: 5px 10px;
+                border-radius: 4px;
+                background: transparent;
+                border: 1px solid #4dabf7;
+                color: #4dabf7;
+                text-decoration: none;
+                font-size: 0.7rem;
+                font-weight: 500;
+                display: inline-block;
+                transition: all 0.2s ease;
+            }
+            .btn-primary:hover {
+                background: rgba(77, 171, 247, 0.1);
+                color: #ffffff;
+                border-color: #ffffff;
+                transform: translateY(-1px);
+            }
+            .btn-danger {
+                padding: 5px 10px;
+                border-radius: 4px;
+                background: transparent;
+                border: 1px solid #ff6b6b;
+                color: #ff6b6b;
+                text-decoration: none;
+                font-size: 0.7rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            .btn-danger:hover {
+                background: rgba(255, 107, 107, 0.1);
+                color: #ffffff;
+                border-color: #ffffff;
+                transform: translateY(-1px);
+            }
+            .success-message {
+                color: #28a745;
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+                padding: 8px 12px;
+                background-color: rgba(40, 167, 69, 0.1);
+                border-radius: 4px;
+                display: inline-block;
+            }
+            .table img {
+                width: 100px;
+                height: 60px;
+                object-fit: cover;
+                border-radius: 4px;
+                border: 1px solid #d1d5db;
+            }
+            .description-cell {
+                max-width: 200px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: 0.75rem;
+                color: rgb(138, 139, 143);
+            }
+        </style>
+    </head>
+    <body>
+        <x-layout>
+            <x-nav>
+                <div style="background-color: rgb(245, 247, 250); width: 100%">
+                    <div style="padding: 30px">
+                        <h2 style="font-size: 1.875rem; font-weight: 600; padding: 0 0 15px 0;">
+                            Sliders
+                        </h2>
+                        
+                        @if (session('success'))
+                            <div class="success-message">
+                                {{ session('success') }}
+                            </div>
+                        @endif
 
-    h2 {
-        color: #ffffff;
-        font-size: 1.2rem;
-        margin-bottom: 15px;
-    }
+                        <div style="font-size: 12px; padding-top: 0.75rem; padding-bottom: 0.75rem; display: flex; gap: 0.75rem; font-weight: 500; color: rgb(56, 116, 255);">
+                            <a href="{{ route('slider.index') }}" style="color: rgb(56, 116, 255)">All ({{ $slider->count() }})</a>
+                            <a href="" style="color: rgb(56, 116, 255)">Enabled ({{ $slider->where('slide_is_enable', true)->count() }})</a>
+                            <a href="" style="color: rgb(56, 116, 255)">Disabled ({{ $slider->where('slide_is_enable', false)->count() }})</a>
+                        </div>
 
-    /* Success Message */
-    .success-message {
-        color: #28a745;
-        font-size: 0.7rem;
-        margin-bottom: 15px;
-    }
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 2.5rem;">
+                                <!-- Search Bar -->
+                                <div style="display: flex; align-items: center; border: 1px solid rgb(203, 208, 221); border-radius: 0.125rem;">
+                                    <svg style="margin: 0 0.5rem" xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="24px" fill="rgb(117,124,145)">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                                    </svg>
+                                    <input id="universal-search" style="width: 350px; font-size: 13px; outline: none; padding: 5px; border: none;" type="text" placeholder="Search sliders..." />
+                                </div>
+                            </div>
+                            <div>
+                                <a class="add-btn" href="{{ route('slider.create') }}">+ Add Slider</a>
+                            </div>
+                        </div>
+                    </div>
 
-    /* Table Styles */
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        background: rgb(20,24,36);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+                    <div style="background-color: white; display: flex; justify-content: center; border-top: 1px solid rgb(203, 208, 221); padding: 0 0 15px 0; border-color: rgb(203, 208, 221);">
+                        <table style="width: 95%">
+                            <thead>
+                                <tr style="font-size: 11px; width: 100%; border-bottom: 1px solid rgb(203, 208, 221);">
+                                    <th>IMAGE</th>
+                                    <th>SMALL IMAGE</th>
+                                    <th>NAME</th>
+                                    <th>BRAND</th>
+                                    <th>CATEGORY</th>
+                                    <th>DESCRIPTION</th>
+                                    <th>STATUS</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;" id="products-table-body">
+                                @foreach($slider as $slider)
+                                    <tr class="product-row" 
+                                        style="border-bottom: 1px solid rgb(203, 208, 221);"
+                                        data-name="{{ strtolower($slider->slide_name) }}"
+                                        data-brand="{{ strtolower($slider->slide_brand) }}"
+                                        data-category="{{ strtolower($slider->slide_category) }}"
+                                        data-description="{{ strtolower($slider->slide_description) }}"
+                                        data-status="{{ $slider->slide_is_enable ? 'enabled' : 'disabled' }}"
+                                    >
+                                        <td>
+                                            @if ($slider->slide_image)
+                                                <img style="width: 50px; height: 50px; object-fit: contain; border-radius: 5px; border: 1px solid #d1d5db;" src="{{ asset('/storage/' . $slider->slide_image) }}" 
+                                                     alt="{{ $slider->slide_name }}" />
+                                            @else
+                                                <span class="badge bg-danger">No Image</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($slider->slide_small_image)
+                                                <img style="width: 50px; height: 50px; object-fit: contain; border-radius: 5px; border: 1px solid #d1d5db;" src="{{ asset('/storage/' . $slider->slide_small_image) }}" 
+                                                     alt="{{ $slider->slide_name }} small" />
+                                            @else
+                                                <span class="badge bg-danger">No Small Image</span>
+                                            @endif
+                                        </td>
+                                        <td style="font-size: 0.875rem; color: rgb(46, 47, 49);">
+                                            {{ $slider->slide_name }}
+                                        </td>
+                                        <td style="font-size: 0.875rem; color: rgb(138, 139, 143);">
+                                            {{ $slider->slide_brand }}
+                                        </td>
+                                        <td style="font-size: 0.875rem; color: rgb(138, 139, 143);">
+                                            {{ $slider->slide_category }}
+                                        </td>
+                                        <td class="description-cell" title="{{ $slider->slide_description }}">
+                                            {{ $slider->slide_description }}
+                                        </td>
+                                        <td>
+                                            <span class="badge {{ $slider->slide_is_enable ? 'bg-success' : 'bg-danger' }}">
+                                                {{ $slider->slide_is_enable ? 'Enabled' : 'Disabled' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div style="position: relative">
+                                                <button class="dropdown-btn" style="color: #6b7280; background: transparent; border: none; padding: 0.25rem 0.75rem; cursor: pointer; font-size: 13px;">
+                                                    •••
+                                                </button>
+                                                <div class="dropdown-menu hidden" style="position: absolute; right: 70px; width: 10rem; background-color: white; border: 1px solid #d1d5db; border-radius: 0.5rem;">
+                                                    <ul style="padding: 0.25rem 0; color: #4b5563; margin: 0;">
+                                                        <li>
+                                                            <a href="#" style="display: block; padding: 0.5rem 1rem; cursor: pointer; text-decoration: none; color: #4b5563;">View</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('slider.edit', $slider->id) }}" style="display: block; padding: 0.5rem 1rem; cursor: pointer; text-decoration: none; color: #4b5563; border-bottom: 1px solid #d1d5db;">Edit</a>
+                                                        </li>
+                                                        <li>
+                                                            <form action="{{ route('slider.destroy', $slider->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" style="display: block; padding: 0.5rem 1rem; width: 100%; cursor: pointer; color: #ef4444; border: none; background: none; text-align: center;" onclick="return confirm('Are you sure you want to delete this slider?')">
+                                                                    Remove
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                   
+                </div>
+            </x-nav>
+        </x-layout>
 
-    .table th {
-        padding: 8px;
-        text-align: center;
-        font-weight: 600;
-        color: rgb(159,166,188);
-        border-bottom: 2px solid rgba(255, 255, 255, 0.1);  
-        background: rgb(25, 29, 41);
-        font-size: 0.5rem;
-    }
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Universal Search Functionality
+                const searchInput = document.getElementById("universal-search");
+                const productRows = document.querySelectorAll(".product-row");
 
-    .table td {
-        padding: 6px 8px;
-        vertical-align: middle;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);  
-        color: rgb(185, 193, 218);
-        font-size: 0.6rem;
-        text-align: center;
-    }
+                function filterProducts() {
+                    const searchTerm = searchInput.value.toLowerCase().trim();
 
-    .table-striped tbody tr:nth-child(odd) {
-        background: rgb(25, 29, 41);
-    }
+                    productRows.forEach((row) => {
+                        const productName = row.getAttribute("data-name");
+                        const productBrand = row.getAttribute("data-brand");
+                        const productCategory = row.getAttribute("data-category");
+                        const productDescription = row.getAttribute("data-description");
+                        const productStatus = row.getAttribute("data-status");
 
-    .table tr:hover {
-        background: rgb(30, 34, 46);
-    }
+                        const matchesSearch = searchTerm === "" || 
+                            (productName && productName.includes(searchTerm)) ||
+                            (productBrand && productBrand.includes(searchTerm)) ||
+                            (productCategory && productCategory.includes(searchTerm)) ||
+                            (productDescription && productDescription.includes(searchTerm)) ||
+                            (productStatus && productStatus.includes(searchTerm));
 
-    /* Image Styles */
-    .table img {
-        width: 50px;
-        object-fit: cover;
-        border-radius: 4px;
-    }
+                        row.style.display = matchesSearch ? "" : "none";
+                    });
+                }
 
-    /* Badge Styles */
-    .badge {
-        padding: 3px 6px;
-        border-radius: 10px;
-        font-size: 0.65rem;
-        color: white;
-    }
+                // Add event listener
+                searchInput.addEventListener("input", filterProducts);
 
-    .bg-success { 
-        background: #28a745; 
-    }
+                // Dropdown Menu Functionality
+                const dropdownBtns = document.querySelectorAll(".dropdown-btn");
+                dropdownBtns.forEach((btn) => {
+                    btn.addEventListener("click", function(e) {
+                        e.stopPropagation();
+                        const menu = this.nextElementSibling;
+                        const isHidden = menu.classList.contains("hidden");
+                        
+                        // Hide all other menus
+                        document.querySelectorAll(".dropdown-menu").forEach(m => {
+                            if (m !== menu) m.classList.add("hidden");
+                        });
+                        
+                        // Toggle current menu
+                        if (isHidden) {
+                            menu.classList.remove("hidden");
+                        } else {
+                            menu.classList.add("hidden");
+                        }
+                    });
+                });
 
-    .bg-danger { 
-        background: #ff6b6b; 
-    }
+                // Close dropdowns when clicking outside
+                document.addEventListener("click", function() {
+                    document.querySelectorAll(".dropdown-menu").forEach(menu => {
+                        menu.classList.add("hidden");
+                    });
+                });
 
-    /* Button Styles */
-    .btn-primary {
-        padding: 3px 12px;
-        border-radius: 3px;
-        background: transparent;
-        border: 1px solid #4dabf7;
-        color: #4dabf7;
-        text-decoration: none;
-        font-size: 0.6rem;
-        font-weight: 500;
-        display: inline-block;
-        transition: all 0.2s ease;
-    }
-
-    .btn-primary:hover {
-        background: rgba(77, 171, 247, 0.1);
-        color: #ffffff;
-        border-color: #ffffff;
-        transform: translateY(-1px);
-    }
-
-    .btn-primary:active {
-        transform: translateY(0);
-        background: rgba(77, 171, 247, 0.2);
-    }
-
-    .btn-danger {
-        padding: 3px 12px;
-        border-radius: 3px;
-        background: transparent;
-        border: 1px solid #ff6b6b;
-        color: #ff6b6b;
-        text-decoration: none;
-        font-size: 0.6rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .btn-danger:hover {
-        background: rgba(255, 107, 107, 0.1);
-        color: #ffffff;
-        border-color: #ffffff;
-        transform: translateY(-1px);
-    }
-
-    .btn-danger:active {
-        transform: translateY(0);
-        background: rgba(255, 107, 107, 0.2);
-    }
-
-    /* Form Styles */
-    .table form {
-        margin: 0;
-        display: inline-block;
-    }
-</style>
-
-<x-layout>
-    <x-nav>
-        <div class="container">
-            <h2>All Sliders</h2>
-
-            @if(session('success'))
-                <p class="success-message">{{ session('success') }}</p>
-            @endif
-        
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>SLIDER IMAGE</th>
-                        <th>SLIDER SMALL IMAGE</th>
-                        <th>SLIDER NAME</th>
-                        <th>SLIDER BRAND</th>
-                        <th>SLIDER DESCRIPTION</th>
-                        <th>SLIDER STATUS</th>
-                        <th>ACTIONS</th>
-                        <th>ACTIONS</th>  
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($slider as $slider)
-                    <tr>
-                        <td>
-                            @if($slider->slide_image)
-                                <img src="{{ asset('storage/' . $slider->slide_image) }}" alt="Slide Image">
-                            @endif
-                        </td>
-                        <td>
-                            @if($slider->slide_small_image)
-                                <img src="{{ asset('storage/' . $slider->slide_small_image) }}" alt="Small Image">
-                            @endif
-                        </td>
-                        <td>{{ $slider->slide_name }}</td>
-                        <td>{{ $slider->slide_brand }}</td>
-                        <td>{{ $slider->slide_description }}</td>
-                        <td>
-                            <span class="badge {{ $slider->slide_is_enable ? 'bg-success' : 'bg-danger' }}">
-                                {{ $slider->slide_is_enable ? 'Enabled' : 'Disabled' }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ route('slider.edit', $slider->id) }}" class="btn-primary">Edit</a>
-                        </td>
-                        <td>
-                            <form action="{{ route('slider.destroy', $slider->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </x-nav>
-</x-layout>
+                // Prevent dropdown from closing when clicking inside
+                document.querySelectorAll(".dropdown-menu").forEach(menu => {
+                    menu.addEventListener("click", function(e) {
+                        e.stopPropagation();
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,166 +1,356 @@
-<style>
-    /* Container Styles */
-    .container {
-        width: 100%;  
-        padding: 15px; /* Reduced from 20px */
-        background: rgb(15,17,26);
-        min-height: 100vh;
-    }
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Logo Management</title>
+        <style>
+            .blue-text {
+                color: rgb(29, 30, 31);
+            }
+            .products {
+                font-size: 12px;
+                font-weight: 500;
+                color: rgb(58, 59, 61);
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            select:not(:last-child) {
+                padding: 6.5px 0;
+                border-right: 1px solid #ccc;
+            }
+            select:focus {
+                outline: none;
+            }
+            option:checked {
+                color: rgb(29, 30, 31);
+            }
+            li {
+                list-style: none;
+            }
+            .add-btn {
+                display: inline-block;
+                padding: 8px 16px;
+                background-color: rgb(56, 116, 255);
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 500;
+                transition: background-color 0.3s ease;
+            }
+            .add-btn:hover {
+                background-color: rgb(45, 93, 204);
+            }
+            .add-btn:active {
+                background-color: rgb(34, 70, 153);
+            }
+            tr th {
+                padding: 10px;
+                border-bottom: 1px solid rgb(203, 208, 221);
+            }
+            tr td {
+                padding: 10px;
+                text-align: center;
+                border-bottom: 1px solid rgb(203, 208, 221);
+            }
+            .hidden {
+                display: none;
+            }
+            .dropdown-menu {
+                z-index: 1000;
+            }
+            .pagination {
+                display: flex;
+                justify-content: center;
+            }
+            .pagination .page-link {
+                background: linear-gradient(to right, #4f46e5, #9333ea);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                padding: 0.75rem 1.25rem;
+                margin: 0 0.5rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+            }
+            .pagination .page-item.active .page-link {
+                background: linear-gradient(to right, #4338ca, #7e22ce);
+            }
+            .pagination .page-link:hover {
+                background: linear-gradient(to right, #3b82f6, #a855f7);
+            }
+            .pagination .disabled .page-link {
+                background: #e5e7eb;
+                color: #6b7280;
+                box-shadow: none;
+            }
+            .custom-pagination {
+                display: flex;
+                justify-content: center;
+                margin-top: 2rem;
+            }
+            .custom-pagination a,
+            .custom-pagination span {
+                padding: 0.75rem 1.25rem;
+                margin: 0 0.5rem;
+                border-radius: 50%;
+                text-decoration: none;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .custom-pagination a {
+                background: linear-gradient(to right, #4f46e5, #9333ea);
+                color: white;
+            }
+            .custom-pagination a:hover {
+                background: linear-gradient(to right, #3b82f6, #a855f7);
+                box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+            }
+            .custom-pagination span {
+                background: #e5e7eb;
+                color: #6b7280;
+            }
+            .custom-pagination .current {
+                background: linear-gradient(to right, #4338ca, #7e22ce);
+                color: white;
+                font-weight: bold;
+            }
+            .btn-create {
+                background-color: transparent;
+                padding: 6px 14px;
+                text-decoration: none;
+                font-size: 13px;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                border-bottom: 2px solid transparent;
+                transition: all 0.2s ease-in-out;
+            }
+            .btn-create i {
+                font-size: 12px;
+            }
+            .btn-create:hover {
+                border-color: #1e7e34;
+            }
+            .h {
+                background: rgb(255, 255, 255);
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                border-top: rgb(143, 146, 135) 1px solid;
+            }
+            .badge {
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 0.8rem;
+                color: white;
+            }
+            .bg-success { 
+                background: #28a745; 
+            }
+            .bg-danger { 
+                background: #ff6b6b; 
+            }
+            .btn-primary {
+                padding: 5px 10px;
+                border-radius: 4px;
+                background: transparent;
+                border: 1px solid #4dabf7;
+                color: #4dabf7;
+                text-decoration: none;
+                font-size: 0.7rem;
+                font-weight: 500;
+                display: inline-block;
+                transition: all 0.2s ease;
+            }
+            .btn-primary:hover {
+                background: rgba(77, 171, 247, 0.1);
+                color: #ffffff;
+                border-color: #ffffff;
+                transform: translateY(-1px);
+            }
+            .btn-danger {
+                padding: 5px 10px;
+                border-radius: 4px;
+                background: transparent;
+                border: 1px solid #ff6b6b;
+                color: #ff6b6b;
+                text-decoration: none;
+                font-size: 0.7rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            .btn-danger:hover {
+                background: rgba(255, 107, 107, 0.1);
+                color: #ffffff;
+                border-color: #ffffff;
+                transform: translateY(-1px);
+            }
+        </style>
+    </head>
+    <body>
+        <x-layout>
+            <x-nav>
+                <div style="background-color: rgb(245, 247, 250); width: 100%">
+                    <div style="padding: 30px">
+                        <h2 style="font-size: 1.875rem; font-weight: 600; padding: 0 0 15px 0;">
+                            Logos
+                        </h2>
+                        <div style="font-size: 12px; padding-top: 0.75rem; padding-bottom: 0.75rem; display: flex; gap: 0.75rem; font-weight: 500; color: rgb(56, 116, 255);">
+                            <a href="{{ route('logo.index') }}" style="color: rgb(56, 116, 255)">All ({{ $logos->count() }})</a>
+                            <a href="" style="color: rgb(56, 116, 255)">Enabled ({{ $logos->where('logo_is_enable', true)->count() }})</a>
+                            <a href="" style="color: rgb(56, 116, 255)">Disabled ({{ $logos->where('logo_is_enable', false)->count() }})</a>
+                        </div>
 
-    /* Table Styles */
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        background: rgb(20,24,36);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 2.5rem;">
+                                <!-- Search Bar -->
+                                <div style="display: flex; align-items: center; border: 1px solid rgb(203, 208, 221); border-radius: 0.125rem;">
+                                    <svg style="margin: 0 0.5rem" xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="24px" fill="rgb(117,124,145)">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                                    </svg>
+                                    <input id="universal-search" style="width: 350px; font-size: 13px; outline: none; padding: 5px; border: none;" type="text" placeholder="Search logos..." />
+                                </div>
+                            </div>
+                            <div>
+                                <a class="add-btn" href="{{ route('logo.create') }}">+ Add Logo</a>
+                            </div>
+                        </div>
+                    </div>
 
-    .table th {
-        padding: 8px; /* Reduced from 12px */
-        text-align: center;
-        font-weight: 600;
-        color: rgb(159,166,188);
-        border-bottom: 2px solid rgba(255, 255, 255, 0.1);  
-        background: rgb(25, 29, 41);
-        font-size: 0.5rem; /* Reduced from 0.55rem */
-    }
+                    <div style="background-color: white; display: flex; justify-content: center; border-top: 1px solid rgb(203, 208, 221); padding: 0 0 15px 0; border-color: rgb(203, 208, 221);">
+                        <table style="width: 95%">
+                            <thead>
+                                <tr style="font-size: 11px; width: 100%; border-bottom: 1px solid rgb(203, 208, 221);">
+                                    <th>LOGO IMAGE</th>
+                                    <th>STATUS</th>
+                                    <th>CREATED AT</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;" id="products-table-body">
+                                @foreach($logos as $logo)
+                                    <tr class="product-row" 
+                                        style="border-bottom: 1px solid rgb(203, 208, 221);"
+                                        data-name="{{ strtolower($logo->logo_name ?? '') }}"
+                                        data-status="{{ $logo->logo_is_enable ? 'enabled' : 'disabled' }}"
+                                        data-date="{{ strtolower($logo->created_at->format('M j, g:i A')) }}"
+                                    >
+                                        <td style="display: flex; align-items: center; justify-content: center; gap: 1.25rem;">
+                                            <img style="width: 100px; height: 50px; object-fit: contain; border-radius: 5px; border: 1px solid #d1d5db;" 
+                                                 src="{{ asset('/storage/' . $logo->logo_image) }}" 
+                                                 alt="Logo" />
+                                        </td>
+                                        <td>
+                                            <span class="badge {{ $logo->logo_is_enable ? 'bg-success' : 'bg-danger' }}">
+                                                {{ $logo->logo_is_enable ? 'Enabled' : 'Disabled' }}
+                                            </span>
+                                        </td>
+                                        <td style="font-size: 0.875rem; color: rgb(66, 68, 70);">
+                                            {{ $logo->created_at->format('M j, g:i A') }}
+                                        </td>
+                                        <td>
+                                            <div style="position: relative">
+                                                <button class="dropdown-btn" style="color: #6b7280; background: transparent; border: none; padding: 0.25rem 0.75rem; cursor: pointer; font-size: 13px;">
+                                                    •••
+                                                </button>
+                                                <div class="dropdown-menu hidden" style="position: absolute; right: 70px; width: 10rem; background-color: white; border: 1px solid #d1d5db; border-radius: 0.5rem;">
+                                                    <ul style="padding: 0.25rem 0; color: #4b5563; margin: 0;">
+                                                        <li>
+                                                            <a href="#" style="display: block; padding: 0.5rem 1rem; cursor: pointer; text-decoration: none; color: #4b5563;">View</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('logo.edit', $logo->id) }}" style="display: block; padding: 0.5rem 1rem; cursor: pointer; text-decoration: none; color: #4b5563; border-bottom: 1px solid #d1d5db;">Edit</a>
+                                                        </li>
+                                                        <li>
+                                                            <form action="{{ route('logo.destroy', $logo->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" style="display: block; padding: 0.5rem 1rem; width: 100%; cursor: pointer; color: #ef4444; border: none; background: none; text-align: center;">
+                                                                    Remove
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                 
+                </div>
+            </x-nav>
+        </x-layout>
 
-    .table td {
-        padding: 6px 8px; /* Reduced from 10px 12px */
-        vertical-align: middle;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);  
-        color: rgb(185, 193, 218);
-        font-size: 0.6rem; /* Reduced from 0.7rem */
-        text-align: center;
-    }
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Universal Search Functionality
+                const searchInput = document.getElementById("universal-search");
+                const productRows = document.querySelectorAll(".product-row");
 
-    .table-striped tbody tr:nth-child(odd) {
-        background: rgb(25, 29, 41);
-    }
+                function filterProducts() {
+                    const searchTerm = searchInput.value.toLowerCase().trim();
 
-    .table tr:hover {
-        background: rgb(30, 34, 46);
-    }
+                    productRows.forEach((row) => {
+                        const productName = row.getAttribute("data-name");
+                        const productStatus = row.getAttribute("data-status");
+                        const productDate = row.getAttribute("data-date");
 
-    /* Image Styles */
-    .table img {
-        width: 50px; /* Reduced from 80px */
-        height: 50px; /* Reduced from 80px */
-        object-fit: cover;
-        border-radius: 4px;
-    }
+                        const matchesSearch = searchTerm === "" || 
+                            (productName && productName.includes(searchTerm)) ||
+                            (productStatus && productStatus.includes(searchTerm)) ||
+                            (productDate && productDate.includes(searchTerm));
 
-    /* Badge Styles */
-    .badge {
-        padding: 3px 6px; /* Reduced from 4px 8px */
-        border-radius: 10px; /* Slightly reduced from 12px */
-        font-size: 0.65rem; /* Reduced from 0.8rem */
-        color: white;
-    }
+                        row.style.display = matchesSearch ? "" : "none";
+                    });
+                }
 
-    .bg-success { 
-        background: #28a745; 
-    }
+                // Add event listener
+                searchInput.addEventListener("input", filterProducts);
 
-    .bg-danger { 
-        background: #ff6b6b; 
-    }
+                // Dropdown Menu Functionality
+                const dropdownBtns = document.querySelectorAll(".dropdown-btn");
+                dropdownBtns.forEach((btn) => {
+                    btn.addEventListener("click", function(e) {
+                        e.stopPropagation();
+                        const menu = this.nextElementSibling;
+                        const isHidden = menu.classList.contains("hidden");
+                        
+                        // Hide all other menus
+                        document.querySelectorAll(".dropdown-menu").forEach(m => {
+                            if (m !== menu) m.classList.add("hidden");
+                        });
+                        
+                        // Toggle current menu
+                        if (isHidden) {
+                            menu.classList.remove("hidden");
+                        } else {
+                            menu.classList.add("hidden");
+                        }
+                    });
+                });
 
-    /* Button Styles */
-    .btn-primary {
-        padding: 3px 12px; /* Reduced from 5px 20px */
-        border-radius: 3px; /* Reduced from 4px */
-        background: transparent;
-        border: 1px solid #4dabf7;
-        color: #4dabf7;
-        text-decoration: none;
-        font-size: 0.6rem; /* Reduced from 0.7rem */
-        font-weight: 500;
-        display: inline-block;
-        transition: all 0.2s ease;
-    }
+                // Close dropdowns when clicking outside
+                document.addEventListener("click", function() {
+                    document.querySelectorAll(".dropdown-menu").forEach(menu => {
+                        menu.classList.add("hidden");
+                    });
+                });
 
-    .btn-primary:hover {
-        background: rgba(77, 171, 247, 0.1);
-        color: #ffffff;
-        border-color: #ffffff;
-        transform: translateY(-1px);
-    }
-
-    .btn-primary:active {
-        transform: translateY(0);
-        background: rgba(77, 171, 247, 0.2);
-    }
-
-    .btn-danger {
-        padding: 3px 12px; /* Reduced from 5px 20px */
-        border-radius: 3px; /* Reduced from 4px */
-        background: transparent;
-        border: 1px solid #ff6b6b;
-        color: #ff6b6b;
-        text-decoration: none;
-        font-size: 0.6rem; /* Reduced from 0.7rem */
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .btn-danger:hover {
-        background: rgba(255, 107, 107, 0.1);
-        color: #ffffff;
-        border-color: #ffffff;
-        transform: translateY(-1px);
-    }
-
-    .btn-danger:active {
-        transform: translateY(0);
-        background: rgba(255, 107, 107, 0.2);
-    }
-
-    /* Form Styles */
-    .table form {
-        margin: 0;
-        display: inline-block;
-    }
-</style>
-
-<x-layout>
-    <x-nav>
-        <div class="container">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Enable</th>
-                        <th>Action</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($logos as $logo)
-                        <tr>
-                            <td>
-                                <img src="{{ asset('storage/' . $logo->logo_image) }}" alt="Logo">
-                            </td>
-                            <td>
-                                <span class="badge {{ $logo->logo_is_enable ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $logo->logo_is_enable ? 'Enabled' : 'Disabled' }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{{ route('logo.edit', $logo->id) }}" class="btn-primary">Edit</a>
-                            </td>
-                            <td>
-                                <form action="{{ route('logo.destroy', $logo->id) }}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </x-nav>
-</x-layout>
+                // Prevent dropdown from closing when clicking inside
+                document.querySelectorAll(".dropdown-menu").forEach(menu => {
+                    menu.addEventListener("click", function(e) {
+                        e.stopPropagation();
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

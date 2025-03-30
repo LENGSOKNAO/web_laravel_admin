@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('slide_name');
             $table->string('slide_brand')->nullable();
+            $table->string('slide_category')->nullable();
             $table->string('slide_image');
             $table->string('slide_small_image')->nullable();
             $table->text('slide_description')->nullable();

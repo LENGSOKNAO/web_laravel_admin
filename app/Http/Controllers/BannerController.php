@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
+    public function banner(){
+        $banners = Banner::all();
+        return response()->json($banners);
+    }
+
     public function index() {
         $banners = Banner::all();
         return view('banner.index', compact('banners'));
@@ -21,10 +26,12 @@ class BannerController extends Controller
         $banners = $request->validate([
             'banner_name' => 'required|string|max:256',
             'banner_description' => 'nullable|string',
-            'banner_image' => 'required|image',
+            'banner_image' => 'required|file',
             'banner_small_image' => 'nullable|image',
             'banner_is_enable' => 'boolean',
-            'banner_link' => 'nullable|string'
+            'banner_link' => 'nullable|string',
+            'banner_brand' => 'nullable|string',
+            'banner_category' => 'nullable|string',
         ]);
 
         $image = $request->file('banner_image')->store('Banners', 'public');
@@ -36,7 +43,9 @@ class BannerController extends Controller
            'banner_image' => $image,
            'banner_small_image' => $image_small,
            'banner_is_enable' => $request->banner_is_enable ?? 0,
-           'banner_link' => $request->banner_link ?? null
+           'banner_link' => $request->banner_link ?? null,
+           'banner_brand' => $request->banner_brand,
+           'banner_category' => $request->banner_category  
         ]);
 
         return redirect()->route('banner.index')->with('success', 'Banner created successfully!');
@@ -54,7 +63,9 @@ class BannerController extends Controller
             'banner_image' => 'nullable|image',
             'banner_small_image' => 'nullable|image',
             'banner_is_enable' => 'boolean',
-            'banner_link' => 'nullable|string'
+            'banner_link' => 'nullable|string',
+            'banner_brand' => 'nullable|string',
+            'banner_category' => 'nullable|string',
         ]);
     
         // Update images if new ones are uploaded
@@ -83,7 +94,9 @@ class BannerController extends Controller
             'banner_image' => $banner->banner_image,
             'banner_small_image' => $banner->banner_small_image,
             'banner_is_enable' => $request->banner_is_enable ?? 0,
-            'banner_link' => $request->banner_link ?? null
+            'banner_link' => $request->banner_link ?? null ,
+            'banner_brand' => $request->banner_brand,
+            'banner_category' => $request->banner_category,
         ]);
     
         return redirect()->route('banner.index')->with('success', 'Banner updated successfully!');

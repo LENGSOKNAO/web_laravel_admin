@@ -8,24 +8,142 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index() {
+    public function showData()
+    {
         $products = Products::all();
+        return response()->json($products);
+    }
+    public function page($id)
+    {
+        $product = Products::find($id);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return response()->json($product);
+    }
+    public function search(Request $request)
+    {
+        try {
+            // Get the search term from the query string
+            $search = $request->query('search');
+
+            // Start building the query
+            $query = Products::query();
+
+            // If there's a search term, apply the filters
+            if ($search) {
+                $query->where('product_name', 'LIKE', "%{$search}%")
+                      ->orWhere('product_brand', 'LIKE', "%{$search}%")
+                      ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(product_category, '$[*]')) LIKE ?", ["%{$search}%"]);
+                      // This searches for partial matches in the JSON array
+            }
+
+            // Only get enabled products
+            $query->where('product_is_enable', true);
+
+            // Sort the results alphabetically
+            $query->orderBy('product_name', 'asc');
+            $query->orderBy('product_brand', 'asc');
+            $query->orderBy('product_category', 'asc');
+
+            // Execute the query and get all matching results
+            $products = $query->get();
+
+            // Check if no products were found
+            if ($products->isEmpty()) {
+                return response()->json(['message' => 'No products found'], 404);
+            }
+
+            // Return the results
+            return response()->json($products);
+        } catch (\Exception $e) {
+            // Log the error and return a generic error message
+            \Log::error("Search Error: " . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+     // Show single product
+     public function show(Products $product)
+     {
+         return view('products.show', compact('product'));
+     }
+    public function index() {
+        $products = Products::paginate(10);
         return view('products.index', compact('products'));
     }
-
+    public function men()
+    {
+        $products = Products::where(function ($query) {
+            $query->where('product_category', 'like', '%men%')
+                  ->orWhereJsonContains('product_category', 'men');
+        })->where(function ($query) {
+            $query->where('product_category', 'not like', '%women%')
+                  ->whereJsonDoesntContain('product_category', 'women');
+        })->paginate(10);
+    
+        return view('products.index', compact('products'));
+    }
+    public function women()
+    {
+        $products = Products::where('product_category', 'like', '%women%')->paginate(10); // Adjust query based on your schema
+        return view('products.index', compact('products'));
+    
+        return view('products.index', compact('products'));
+    }
+    public function kids()
+    {
+        $products = Products::where('product_category', 'like', '%kids%')->paginate(10); // Adjust query based on your schema
+        return view('products.index', compact('products'));
+    }
+    public function shoes()
+    {
+        $products = Products::where('product_category', 'like', '%shoes%')->paginate(10); // Adjust query based on your schema
+        return view('products.index', compact('products'));
+    }
+    public function clothing()
+    {
+        $products = Products::where('product_category', 'like', '%clothing%')->paginate(10); // Adjust query based on your schema
+        return view('products.index', compact('products'));
+    }
+    public function t_shirt()
+    {
+        $products = Products::where('product_category', 'like', '%t_shirt%')->paginate(10); // Adjust query based on your schema
+        return view('products.index', compact('products'));
+    }
+    public function terry()
+    {
+        $products = Products::where('product_category', 'like', '%terry%')->paginate(10); // Adjust query based on your schema
+        return view('products.index', compact('products'));
+    }
+    public function pant()
+    {
+        $products = Products::where('product_category', 'like', '%pant%')->paginate(10); // Adjust query based on your schema
+        return view('products.index', compact('products'));
+    }
+    public function basketball_jersey()
+    {
+        $products = Products::where('product_category', 'like', '%basketball_jersey%')->paginate(10); // Adjust query based on your schema
+        return view('products.index', compact('products'));
+    }
+    public function sport()
+    {
+        $products = Products::where('product_category', 'like', '%sport%')->paginate(10); // Adjust query based on your schema
+        return view('products.index', compact('products'));
+    }
     public function create() {
         return view('products.create');
     }
-    
     public function store(Request $request)
     {
         $validated = $request->validate([
             'product_name' => 'required|string|max:256',
-            'product_category' => 'required|array', // Changed to array
-            'product_category.*' => 'required|string', // Validate each category
+            'product_category' => 'required|array',  
+            'product_category.*' => 'required|string', 
             'product_brand' => 'required|string|max:256',
-            'product_sizes' => 'required|array', // Changed to array
-            'product_sizes.*' => 'required|string', // Validate each size
+            'product_sizes' => 'required|array',  
+            'product_sizes.*' => 'required|string',  
             'product_description' => 'nullable|string',
             'product_price' => 'required|numeric|min:0',
             'product_qty' => 'required|integer',
@@ -47,9 +165,9 @@ class ProductController extends Controller
     
         Products::create([
             'product_name' => $request->product_name,
-            'product_category' => $request->product_category, // Already an array from select
+            'product_category' => $request->product_category,  
             'product_brand' => $request->product_brand,
-            'product_sizes' => $request->product_sizes, // Already an array from select
+            'product_sizes' => $request->product_sizes,  
             'product_description' => $request->product_description,
             'product_price' => $request->product_price,
             'product_qty' => $request->product_qty,
@@ -134,9 +252,10 @@ class ProductController extends Controller
     
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
-    public function destroy(Products $product)
-    {
-        $product->delete();
-        return view('products.index');
-    } 
+      // Delete product
+      public function destroy(Products $product)
+      {
+          $product->delete();
+          return redirect()->route('products.index')->with('success', 'Product deleted successfully');
+      }
 }
