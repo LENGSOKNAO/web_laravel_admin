@@ -11,7 +11,7 @@ require __DIR__.'/auth.php';
  
 
  
-Route::resource('/', LogoController::class);
+Route::resource('logo', LogoController::class);
 Route::resource('slider', SilderController::class);
 Route::resource('banner', BannerController::class);
 Route::resource('products', ProductController::class);
