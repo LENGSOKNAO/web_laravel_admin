@@ -52,39 +52,7 @@
                         phoenix
                     </h2>
                 </div>
-                <div
-                    style="
-                        display: flex;
-                        align-items: center;
-                        border: 1px solid rgb(203, 208, 221);
-                        border-radius: 32px; /* rounded-4xl (equivalent to 32px) */
-                    "
-                >
-                    <svg
-                        style="margin-left: 0.5rem; margin-right: 0.5rem;" 
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="17px"
-                        viewBox="0 -960 960 960"
-                        width="24px"
-                        fill="rgb(117,124,145)"
-                    >
-                        <path
-                            d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
-                        />
-                    </svg>
-                    <input
-                        style="
-                            width: 350px;
-                            font-size: 13px;
-                            outline: none;
-                            padding: 5px;
-                            border:none;
-                            border-radius: 32px;
-                        "
-                        type="text"
-                        placeholder="Search..."
-                    />
-                </div>
+              
                 <div
                     style="
                         display: flex;
